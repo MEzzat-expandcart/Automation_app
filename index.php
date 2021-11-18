@@ -11,8 +11,29 @@
 <body>
 
 <div class="container">
-  <h2>Automation Inputs Form</h2>
-  <form  id = "mainForm" class="form-horizontal" method="POST" action="./run_bash.php"  enctype="multipart/form-data">
+  <h2>Automation Apps Process Configurations</h2>
+
+    <div class="col-lg-12">
+        <h4>Upload App Folder's Logos</h4>
+    </div>
+    <div class="form-group">
+        <form style="padding-left:80px" class="form-horizontal" action="./run_bash.php" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                Type Folder Name Here :  <input type="text" name="folderName" />
+            </div>
+            <div class="form-group">
+                Select Logo Folder to Upload:  <input type="file" name="files[]" id="files" multiple directory="" webkitdirectory="" moxdirectory="" />
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary" type="Submit" value="Upload" name="upload" />
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-12">
+        <h4></h4>
+    </div>
+
+    <form  id = "mainForm" class="form-horizontal" method="POST" action="./run_bash.php"  enctype="multipart/form-data">
     <div class="col-lg-12">
           <h4>General Config</h4>
       </div>
@@ -77,13 +98,10 @@
       </div>
   </div>
     <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-              Select Folder to Upload: <input type="file" name="files[]" id="files" multiple directory="" webkitdirectory="" moxdirectory="" />
-    </div>
-      </div>
+  </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+            <button id="submit" type="submit" class="btn btn-primary" >Submit</button>
         </div>
     </div>
   </form>
@@ -108,11 +126,6 @@
             });
 
 
-        });
-
-        $("#input-folder-3").fileinput({
-            uploadUrl: "/file-upload-batch/2",
-            hideThumbnailContent: true // hide image, pdf, text or other content in the thumbnail preview
         });
     });
 </script>
