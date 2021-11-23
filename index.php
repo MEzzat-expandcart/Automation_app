@@ -22,7 +22,7 @@
                 Type Folder Name Here :  <input type="text" name="folderName" />
             </div>
             <div class="form-group">
-                Select Logo Folder to Upload:  <input type="file" name="files[]" id="files" multiple directory="" webkitdirectory="" moxdirectory="" />
+                Select Logo Zip Folder to Upload:  <input type="file" name="files" id="files"/>
             </div>
             <div class="form-group">
                 <input class="btn btn-primary" type="Submit" value="Upload" name="upload" />

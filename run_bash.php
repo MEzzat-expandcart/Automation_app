@@ -25,13 +25,19 @@ if(isset($_POST['upload'])) {
     if (!empty($_POST['folderName'])) {
         $folderName = $_POST['folderName'];
         if (!is_dir($folderName)) mkdir($folderName);
-        foreach ($_FILES['files']['name'] as $i => $name) {
-            if (strlen($_FILES['files']['name'][$i]) > 1) {
-                move_uploaded_file($_FILES['files']['tmp_name'][$i], $folderName . "/" . $name);
-            }
+        move_uploaded_file($_FILES['files']['tmp_name'], $folderName . "/" . $_FILES['files']['name']);
+        $zip = new ZipArchive();
+        if ($zip->open($folderName . "/" . $_FILES['files']['name'])) {
+            $zip->extractTo(__DIR__.'/'.$folderName);
+            $zip->close();
+            unlink($folderName . "/" . $_FILES['files']['name']);
+            echo '<script type="text/javascript">window.location.assign("index.php");alert("Folder is successfully uploaded , Please complete Other Configs");</script>';
+        } else {
+            echo 'Error the zip file is corrupted';
         }
-        echo '<script type="text/javascript">window.location.assign("index.php");alert("Folder is successfully uploaded , Please complete Other Configs");</script>';
+
     } else {
         echo "Upload folder name is empty";
     }
 }
+
