@@ -29,19 +29,19 @@ if(isset($_POST['storeName'], $_POST['storeUsername'], $_POST['storePassword'], 
 
 
     # store variables
-    $varStoreName= $_POST['storeName'] ?? "halagtalmadina.com";
-    $varStoreUsername= $_POST['storeUsername'] ?? "KJayZ7EF86";
-    $varStorePassword= $_POST['storePassword'] ?? "cbrvoCd1aZh09WX";
-    $varStoreCode= $_POST['storeCode'] ?? "KQJGVB4732";
+    $varStoreName= escapeshellarg($_POST['storeName']) ?? "halagtalmadina.com";
+    $varStoreUsername= escapeshellarg($_POST['storeUsername']) ?? "KJayZ7EF86";
+    $varStorePassword= escapeshellarg($_POST['storePassword']) ?? "cbrvoCd1aZh09WX";
+    $varStoreCode= escapeshellarg($_POST['storeCode']) ?? "KQJGVB4732";
 
     #android specific variables
-    $varStorePackage= $_POST['storePackage'] ?? "com.automation.test";
-    $varStoreEnName= $_POST['storeEnName'] ?? "English name";
-    $varStoreArName= $_POST['storeArName'] ?? "arabic name";
+    $varStorePackage= escapeshellarg($_POST['storePackage']) ?? "com.automation.test";
+    $varStoreEnName= escapeshellarg($_POST['storeEnName']) ?? "English name";
+    $varStoreArName= escapeshellarg($_POST['storeArName']) ?? "Arabic name";
 
     #ios specific variables
-    $varIOSName= $_POST['IOSName'] ?? "automation name";
-    $varIOSBundle= $_POST['IOSBundle'] ?? "com.test.automation";
+    $varIOSName= escapeshellarg($_POST['IOSName']) ?? "automation name";
+    $varIOSBundle= escapeshellarg($_POST['IOSBundle']) ?? "com.test.automation";
 
     // get config.constants.ts file
     $configConstantsFile = file_get_contents('/Applications/XAMPP/xamppfiles/htdocs/Automation/mobileapp/src/constants/config.constants.ts');
@@ -88,20 +88,19 @@ if(isset($_POST['storeName'], $_POST['storeUsername'], $_POST['storePassword'], 
     $androidLanguagesFile = str_replace($varPlaceHolderARStoreName, $varStoreArName, $androidLanguagesFile);
     file_put_contents('/Applications/XAMPP/xamppfiles/htdocs/Automation/mobileapp/android/app/src/main/res/values-ar/strings.xml', $androidLanguagesFile);
 
-    $x = "osascript -e 'tell app \"Terminal\" to do script \"new  /Applications/XAMPP/xamppfiles/htdocs/Automation/ 
-    open /Applications/XAMPP/xamppfiles/htdocs/Automation/build.sh\"'";
-    
+    #ios specific variables
+    $varIOSName= $_POST['IOSName'] ?? "automation name";
+    $varIOSBundle= $_POST['IOSBundle'] ?? "com.test.automation";
 
-    $build = shell_exec($x);
-    echo "<pre>$build</pre>";
-//    $codescript = __DIR__ . '/code.sh';
-//    $command = 'bash '. $codescript .' '. $storeName . ' ' . $storeUsername. ' ' . $storePassword. ' ' . $storeCode;
-//    $output = shell_exec($command);
-//    echo "<pre>$output</pre>";
+    $command = "osascript -e 'tell app \"Terminal\" to do script \"new  /Applications/XAMPP/xamppfiles/htdocs/Automation/ 
+    open /Applications/XAMPP/xamppfiles/htdocs/Automation/build.sh\"'";
+
+    $output = shell_exec($command);
+    echo "<pre>$output</pre>";
 
 }
 
-// upload folders to server with a predefined directory name
+// upload folders to server with a predefined directory name process
 if(isset($_POST['upload'])) {
     if (!empty($_POST['folderName'])) {
         $folderName = $_POST['folderName'];
@@ -112,7 +111,6 @@ if(isset($_POST['upload'])) {
             $zip->extractTo(__DIR__.'/'.$folderName);
             $zip->close();
             unlink($folderName . "/" . $_FILES['files']['name']);
-            shell_exec('cp -R /Applications/XAMPP/xamppfiles/htdocs/Automation/'.$folderName.'/android/* /Applications/XAMPP/xamppfiles/htdocs/Automation/mobileapp/android/app/src/main/res/');
             echo '<script type="text/javascript">window.location.assign("index.php");alert("Folder is successfully uploaded , Please complete Other Configs");</script>';
         } else {
             echo 'Error the zip file is corrupted';
@@ -123,3 +121,37 @@ if(isset($_POST['upload'])) {
     }
 }
 
+
+// download package file process
+if(isset($_GET['path']))
+{
+    //Read the url
+    $url = $_GET['path'];
+
+    //Clear the cache
+    clearstatcache();
+
+    //Check the file path exists or not
+    if(file_exists($url)) {
+
+    //Define header information
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="'.basename($url).'"');
+        header('Content-Length: ' . filesize($url));
+        header('Pragma: public');
+
+    //Clear system output buffer
+        flush();
+
+    //Read the size of the file
+        readfile($url,true);
+
+    //Terminate from the script
+        die();
+    }
+    else{
+        echo "File path does not exist.";
+    }
+}
+echo "File path is not defined.";

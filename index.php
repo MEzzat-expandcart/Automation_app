@@ -105,6 +105,15 @@
         </div>
     </div>
   </form>
+
+    <div id = "downloadArea" style="display: none; padding-bottom: 30px">
+        <div class="alert alert-success" role="alert">
+            Package Has Been Build Successfully
+        </div>
+        <button type="button" id = "downloadBtn" class="btn btn-primary btn-lg btn-block" >
+            <a  style="color: #ffffff;" href="run_bash.php?path=img/rsz_21.jpg">Download Package File Now</a>
+        </button>
+    </div>
 </div>
 
 
@@ -121,7 +130,8 @@
                 data: form.serialize(), // serializes the form's elements.
                 success: function(data)
                 {
-                    alert(data); // show response from the php script.
+                    console.log(data); // show response from the php script.
+                    $("#downloadArea").show();
                 }
             });
 
